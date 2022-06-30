@@ -51,15 +51,15 @@
 
                         <ul style="list-style:none; position:inline-block; color: red;">
 
-                            <form action="/cars/{{$car->id}}" method="POST" id="del">
+                            <form action="/cars/{{$car->id}}" method="POST" id="del{{$car->id}}">
                                 @csrf
                                 @method('DELETE')
-                                <a href="#" onclick="document.getElementById('del').submit();">Delete </a>
+                                <a href="#" onclick="document.getElementById('del{{$car->id}}').submit();">Delete </a>
                             </form>
                             <a> | </a>
-                            <form action="/cars/edit/{{$car->id}}" method="GET" id="edit">
+                            <form action="/cars/edit/{{$car->id}}" method="GET" id="edit{{$car->id}}">
                                 @csrf
-                                <a href="#" onclick="document.getElementById('edit').submit();">Edit</a>
+                                <a href="#" onclick="document.getElementById('edit{{$car->id}}').submit();">Edit </a>
                             </form>
                         </ul>
                     </div>

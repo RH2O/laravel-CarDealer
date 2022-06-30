@@ -10,8 +10,6 @@ use function GuzzleHttp\Promise\all;
 class CarController extends Controller
 {
     
-
-
     public function index(){
        
         $cars = Car::latest()->simplePaginate(6);
@@ -52,9 +50,6 @@ class CarController extends Controller
             
         ]);
 
-       
-
-    
         //  $newImageName = time() . $request->name . '.'. $request->images->extension();
         
         //  $request->file('images')->move(public_path('images/cars'),$newImageName);
@@ -76,32 +71,13 @@ class CarController extends Controller
         /// array of paths to string
         $images = implode(',',$imagesArr);
 
-         $request->merge([
-            'images' => $request->images,
-            'image_path' => $images
-          ]);
+        $request['user_id'] = auth()->id();
 
-          $request->only('image_path');
+        //  if(Car::create($request->all())) return redirect('/');
 
-          $request['user_id'] = auth()->id();
-
-         if(Car::create($request->all())) return redirect('/');
+         if(Car::create(array_merge($request->all(),['image_path'=>$images]))) return redirect('/');
         
           return redirect('/cars/create')->withErrors(['name'=>'somthing went wrong']);
-
-        //  if(Car::create([
-
-        //     'name' => $request->name,
-        //     'type' => $request->type,
-        //     'model' => $request->model,
-        //     'fuel' => $request->fuel,
-        //     'color' => $request->color,
-        //     'mileage' => $request->mileage,
-        //     'price' => $request->price,
-        //     'image_path' => $newImageName,
-
-        //  ])) return redirect('/');
-
 
     }
 
@@ -117,15 +93,6 @@ class CarController extends Controller
             ['color','like', '%'.request('color').'%'],
             ])
         ->simplePaginate(6);
-
-        // $oldData = [
-        //     'name'=> request('name'),
-        //     'model'=> request('model'),
-        //     'type'=> request('type'),
-        //     'name'=> request('color'),
-        // ];
-        
-        
 
         return view('cars.index',['cars'=>$cars]);
 
@@ -185,7 +152,7 @@ class CarController extends Controller
        'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg', 
    ]);
 
-
+   $imagesArr = [];
    if($request->hasfile('images'))
    {
       $imagesArr = [];
@@ -198,28 +165,17 @@ class CarController extends Controller
       }
 
        /// array of paths to string
-        $images = implode(',',$imagesArr);
-
-        // for changing images name to image_path name // to use $reqest(all())
-        $request->merge([
-        'images' => $request->images,
-        'image_path' => $images
-        ]);
-
-        $request->only('image_path');
+       $images = implode(',',$imagesArr);
+       $imagesPath =  ['image_path'=>$images];
 
    }
 
-  
+ 
 
-    if($car->update($request->all())) return redirect('/');
+    if($car->update(array_merge($request->all(),$imagesPath ?? []))) return redirect('/cars/manage');
    
      return redirect('/cars/create')->withErrors(['name'=>'somthing went wrong']);
 
-
 }
-
-
-
 
 }

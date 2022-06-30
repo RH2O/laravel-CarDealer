@@ -33,6 +33,7 @@ class UserController extends Controller
 
         $user = User::create($request->all());
 
+        dd($user);
 
         auth()->login($user);
 
