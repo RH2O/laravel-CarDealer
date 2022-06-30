@@ -35,11 +35,7 @@ Route::get('/contact', function(){
 
 
 ///Users
-Route::get('/login',[UserController::class, 'loginView']);
-Route::get('/register',[UserController::class, 'registerView']);
-Route::post('/register',[UserController::class, 'register']);
-Route::post('/login',[UserController::class, 'login'])->name('login');
-Route::get('/logout',[UserController::class, 'logout']);
+
 
 
 ////Cars
